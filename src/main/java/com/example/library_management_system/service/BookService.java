@@ -3,6 +3,7 @@ package com.example.library_management_system.service;
 import com.example.library_management_system.model.Book;
 import com.example.library_management_system.repository.BookRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -14,5 +15,8 @@ public class BookService {
     }
     public List<Book> getAllBooks(){
         return bookRepository.findAll();
+    }
+    public List<Book> getBooksByTitle(String title) {
+        return bookRepository.findByTitleContainingIgnoreCase(title);
     }
 }
