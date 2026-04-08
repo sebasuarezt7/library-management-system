@@ -38,51 +38,7 @@ Run the following SQL in MySQL:
 CREATE DATABASE librarydb;
 USE librarydb;
 
-Step 2: Create the tables
-
-Run the following SQL:
-
-CREATE TABLE categories (
-id BIGINT AUTO_INCREMENT PRIMARY KEY,
-name VARCHAR(100) NOT NULL UNIQUE
-);
-
-CREATE TABLE users (
-id BIGINT AUTO_INCREMENT PRIMARY KEY,
-full_name VARCHAR(100) NOT NULL,
-email VARCHAR(100) NOT NULL UNIQUE,
-role VARCHAR(20) NOT NULL,
-created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE books (
-id BIGINT AUTO_INCREMENT PRIMARY KEY,
-title VARCHAR(200) NOT NULL,
-author VARCHAR(150) NOT NULL,
-isbn VARCHAR(20) NOT NULL UNIQUE,
-published_year INT NOT NULL,
-quantity INT NOT NULL DEFAULT 0,
-available_quantity INT NOT NULL DEFAULT 0,
-category_id BIGINT NOT NULL,
-CONSTRAINT fk_books_category
-FOREIGN KEY (category_id) REFERENCES categories(id)
-);
-
-CREATE TABLE loans (
-id BIGINT AUTO_INCREMENT PRIMARY KEY,
-borrow_date DATE NOT NULL,
-due_date DATE NOT NULL,
-return_date DATE NULL,
-status VARCHAR(20) NOT NULL,
-user_id BIGINT NOT NULL,
-book_id BIGINT NOT NULL,
-CONSTRAINT fk_loans_user
-FOREIGN KEY (user_id) REFERENCES users(id),
-CONSTRAINT fk_loans_book
-FOREIGN KEY (book_id) REFERENCES books(id)
-);
-
-Step 3: Insert initial categories
+Step 2 (OPTIONAL): Insert initial categories
 
 Run the following SQL to ensure the application has predefined categories:
 
