@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Book Details</title>
+</head>
+<body>
+
+<h1>Book Details</h1>
+
+<nav>
+    <a th:href="@{/books}">Back to Books</a> |
+    <a th:href="@{/loans}">Borrowed Books</a> |
+    <a th:href="@{/loans/history}">Loan History</a> |
+    <a th:href="@{/logout}">Logout</a>
+</nav>
+
+<br>
+
+<div th:if="${book != null}">
+    <p><strong>Title:</strong> <span th:text="${book.title}"></span></p>
+    <p><strong>Author:</strong> <span th:text="${book.author}"></span></p>
+    <p><strong>ISBN:</strong> <span th:text="${book.isbn}"></span></p>
+    <p><strong>Published Year:</strong> <span th:text="${book.publishedYear}"></span></p>
+    <p><strong>Quantity:</strong> <span th:text="${book.quantity}"></span></p>
+    <p><strong>Available Quantity:</strong> <span th:text="${book.availableQuantity}"></span></p>
+    <p><strong>Category:</strong> <span th:text="${book.category.name}"></span></p>
+
+    <div th:if="${loggedUser.role == 'USER' and book.availableQuantity > 0}">
+        <a th:href="@{/loans/borrow/{id}(id=${book.id})}">Borrow this Book</a>
+    </div>
+
+    <div th:if="${loggedUser.role == 'ADMIN'}">
+        <a th:href="@{/books/edit/{id}(id=${book.id})}">Edit</a>
+    </div>
+</div>
+
+</body>
+</html>

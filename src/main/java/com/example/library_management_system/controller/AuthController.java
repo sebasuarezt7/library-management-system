@@ -2,12 +2,10 @@ package com.example.library_management_system.controller;
 
 import com.example.library_management_system.model.LibraryUser;
 import com.example.library_management_system.service.UserService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class AuthController {
@@ -17,10 +15,12 @@ public class AuthController {
     public AuthController(UserService userService) {
         this.userService = userService;
     }
+
     @GetMapping("/")
     public String home() {
         return "redirect:/login";
     }
+
     @GetMapping("/login")
     public String showLoginPage() {
         return "auth/login";
@@ -29,16 +29,18 @@ public class AuthController {
     @PostMapping("/login")
     public String login(@RequestParam String email,
                         @RequestParam String password,
+                        HttpSession session,
                         Model model) {
 
         LibraryUser user = userService.login(email, password);
 
-        if (user != null) {
-            return "redirect:/books";
+        if (user == null) {
+            model.addAttribute("error", "Invalid email or password");
+            return "auth/login";
         }
 
-        model.addAttribute("error", "Invalid email or password");
-        return "auth/login";
+        session.setAttribute("loggedUser", user);
+        return "redirect:/books";
     }
 
     @GetMapping("/register")
@@ -48,9 +50,22 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public String register(@ModelAttribute("user") LibraryUser user) {
+    public String register(@ModelAttribute("user") LibraryUser user, Model model) {
         user.setRole("USER");
-        userService.registerUser(user);
+
+        LibraryUser savedUser = userService.registerUser(user);
+
+        if (savedUser == null) {
+            model.addAttribute("error", "Email already exists");
+            return "auth/register";
+        }
+
+        return "redirect:/login";
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        session.invalidate();
         return "redirect:/login";
     }
 }

@@ -14,6 +14,9 @@ public class UserService {
     }
 
     public LibraryUser registerUser(LibraryUser user) {
+        if (userRepository.existsByEmail(user.getEmail())) {
+            return null;
+        }
         return userRepository.save(user);
     }
 

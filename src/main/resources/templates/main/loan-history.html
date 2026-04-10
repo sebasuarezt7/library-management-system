@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Loan History</title>
+</head>
+<body>
+
+<h1>Loan History</h1>
+
+<nav>
+    <a th:href="@{/books}">Books</a> |
+    <a th:href="@{/loans}">Borrowed Books</a> |
+    <a th:href="@{/loans/history}">Loan History</a> |
+    <a th:href="@{/logout}">Logout</a>
+</nav>
+
+<br>
+
+<div th:if="${#lists.isEmpty(loans)}">
+    <p>No loan history found.</p>
+</div>
+
+<div th:each="loan : ${loans}" style="border:1px solid #ccc; padding:10px; margin-bottom:10px;">
+    <p><strong>Book:</strong> <span th:text="${loan.book.title}"></span></p>
+    <p><strong>Borrow Date:</strong> <span th:text="${loan.borrowDate}"></span></p>
+    <p><strong>Due Date:</strong> <span th:text="${loan.dueDate}"></span></p>
+    <p><strong>Return Date:</strong> <span th:text="${loan.returnDate}"></span></p>
+    <p><strong>Status:</strong> <span th:text="${loan.status}"></span></p>
+</div>
+
+</body>
+</html>

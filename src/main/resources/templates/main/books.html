@@ -1,27 +1,72 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8">
     <title>Books</title>
 </head>
 <body>
 
-<h1>Books List</h1>
+<h1>Books</h1>
+<p>
+    Welcome,
+    <span th:text="${loggedUser.firstName + ' ' + loggedUser.lastName}"></span>
+    (<span th:text="${loggedUser.role}"></span>)
+</p>
+
+<nav>
+    <a th:href="@{/books}">Books</a> |
+    <a th:href="@{/loans}">Borrowed Books</a> |
+    <a th:href="@{/loans/history}">Loan History</a> |
+    <a th:href="@{/logout}">Logout</a>
+</nav>
+
+<br>
+
+<div th:if="${success}">
+    <p th:text="${success}" style="color:green;"></p>
+</div>
+
+<div th:if="${error}">
+    <p th:text="${error}" style="color:red;"></p>
+</div>
+
+<div th:if="${loggedUser.role == 'ADMIN'}">
+    <a th:href="@{/books/add}">Add New Book</a>
+</div>
+
+<br>
 
 <form th:action="@{/books/search}" method="get">
     <input type="text" name="title" placeholder="Search by title" th:value="${searchValue}">
     <button type="submit">Search</button>
 </form>
 
+<br>
+
 <div th:if="${#lists.isEmpty(books)}">
-    <p>No books found</p>
+    <p>No books found.</p>
 </div>
 
-<div th:each="book : ${books}">
-    <div style="margin-bottom: 20px; border: 1px solid black; padding: 10px;">
-        <p><strong>ID:</strong> <span th:text="${book.id}"></span></p>
-        <p><strong>Title:</strong> <span th:text="${book.title}"></span></p>
-        <p><strong>Author:</strong> <span th:text="${book.author}"></span></p>
-    </div>
+<div th:each="book : ${books}" style="border:1px solid #ccc; padding:10px; margin-bottom:10px;">
+    <p><strong>Title:</strong> <span th:text="${book.title}"></span></p>
+    <p><strong>Author:</strong> <span th:text="${book.author}"></span></p>
+    <p><strong>Available Quantity:</strong> <span th:text="${book.availableQuantity}"></span></p>
+    <p><strong>Category:</strong> <span th:text="${book.category.name}"></span></p>
+
+    <a th:href="@{/books/{id}(id=${book.id})}">Details</a>
+
+    <span th:if="${loggedUser.role == 'ADMIN'}">
+          <a th:href="@{/books/edit/{id}(id=${book.id})}">Edit</a>
+          <a th:href="@{/books/delete/{id}(id=${book.id})}">Delete</a>
+    </span>
+
+    <span th:if="${loggedUser.role == 'USER'}">
+          <a th:if="${book.availableQuantity > 0}"
+             th:href="@{/loans/borrow/{id}(id=${book.id})}">
+             Borrow
+          </a>
+        <span th:if="${book.availableQuantity <= 0}"> | Not Available</span>
+    </span>
 </div>
 
 </body>
