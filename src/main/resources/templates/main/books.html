@@ -3,70 +3,94 @@
 <head>
     <meta charset="UTF-8">
     <title>Books</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 </head>
 <body>
 
-<h1>Books</h1>
-<p>
-    Welcome,
-    <span th:text="${loggedUser.firstName + ' ' + loggedUser.lastName}"></span>
-    (<span th:text="${loggedUser.role}"></span>)
-</p>
+<div class="container mt-5">
 
-<nav>
-    <a th:href="@{/books}">Books</a> |
-    <a th:href="@{/loans}">Borrowed Books</a> |
-    <a th:href="@{/loans/history}">Loan History</a> |
-    <a th:href="@{/logout}">Logout</a>
-</nav>
+    <h2 class="text-center mb-3">Books</h2>
 
-<br>
+    <p class="text-center">
+        Welcome,
+        <strong th:text="${loggedUser.firstName + ' ' + loggedUser.lastName}"></strong>
+        (<span th:text="${loggedUser.role}"></span>)
+    </p>
 
-<div th:if="${success}">
-    <p th:text="${success}" style="color:green;"></p>
-</div>
+    <!-- NAV -->
+    <div class="mb-3 text-center">
+        <a th:href="@{/books}" class="btn btn-primary btn-sm">Books</a>
+        <a th:href="@{/loans}" class="btn btn-secondary btn-sm">Borrowed</a>
+        <a th:href="@{/loans/history}" class="btn btn-dark btn-sm">History</a>
+        <a th:href="@{/logout}" class="btn btn-danger btn-sm">Logout</a>
+    </div>
 
-<div th:if="${error}">
-    <p th:text="${error}" style="color:red;"></p>
-</div>
+    <!-- ALERTS -->
+    <div th:if="${success}" class="alert alert-success text-center">
+        <span th:text="${success}"></span>
+    </div>
 
-<div th:if="${loggedUser.role == 'ADMIN'}">
-    <a th:href="@{/books/add}">Add New Book</a>
-</div>
+    <div th:if="${error}" class="alert alert-danger text-center">
+        <span th:text="${error}"></span>
+    </div>
 
-<br>
+    <!-- ADMIN ACTION -->
+    <div class="mb-3" th:if="${loggedUser.role == 'ADMIN'}">
+        <a th:href="@{/books/add}" class="btn btn-success">Add New Book</a>
+    </div>
 
-<form th:action="@{/books/search}" method="get">
-    <input type="text" name="title" placeholder="Search by title" th:value="${searchValue}">
-    <button type="submit">Search</button>
-</form>
+    <!-- SEARCH -->
+    <form th:action="@{/books/search}" method="get" class="mb-4">
+        <div class="input-group">
+            <input type="text" name="title" class="form-control"
+                   placeholder="Search by title" th:value="${searchValue}">
+            <button type="submit" class="btn btn-outline-primary">Search</button>
+        </div>
+    </form>
 
-<br>
+    <!-- EMPTY -->
+    <div th:if="${#lists.isEmpty(books)}" class="alert alert-info text-center">
+        No books found.
+    </div>
 
-<div th:if="${#lists.isEmpty(books)}">
-    <p>No books found.</p>
-</div>
+    <!-- BOOK LIST -->
+    <div th:each="book : ${books}" class="card mb-3 shadow-sm p-3">
 
-<div th:each="book : ${books}" style="border:1px solid #ccc; padding:10px; margin-bottom:10px;">
-    <p><strong>Title:</strong> <span th:text="${book.title}"></span></p>
-    <p><strong>Author:</strong> <span th:text="${book.author}"></span></p>
-    <p><strong>Available Quantity:</strong> <span th:text="${book.availableQuantity}"></span></p>
-    <p><strong>Category:</strong> <span th:text="${book.category.name}"></span></p>
+        <h5 th:text="${book.title}"></h5>
 
-    <a th:href="@{/books/{id}(id=${book.id})}">Details</a>
+        <p><strong>Author:</strong> <span th:text="${book.author}"></span></p>
+        <p><strong>Available:</strong> <span th:text="${book.availableQuantity}"></span></p>
+        <p><strong>Category:</strong> <span th:text="${book.category.name}"></span></p>
 
-    <span th:if="${loggedUser.role == 'ADMIN'}">
-          <a th:href="@{/books/edit/{id}(id=${book.id})}">Edit</a>
-          <a th:href="@{/books/delete/{id}(id=${book.id})}">Delete</a>
-    </span>
+        <!-- ACTIONS -->
+        <div class="mt-2">
 
-    <span th:if="${loggedUser.role == 'USER'}">
-          <a th:if="${book.availableQuantity > 0}"
-             th:href="@{/loans/borrow/{id}(id=${book.id})}">
-             Borrow
-          </a>
-        <span th:if="${book.availableQuantity <= 0}"> | Not Available</span>
-    </span>
+            <a th:href="@{/books/{id}(id=${book.id})}" class="btn btn-primary btn-sm">Details</a>
+
+            <!-- ADMIN -->
+            <span th:if="${loggedUser.role == 'ADMIN'}">
+                <a th:href="@{/books/edit/{id}(id=${book.id})}" class="btn btn-warning btn-sm">Edit</a>
+                <a th:href="@{/books/delete/{id}(id=${book.id})}" class="btn btn-danger btn-sm">Delete</a>
+            </span>
+
+            <!-- USER -->
+            <span th:if="${loggedUser.role == 'USER'}">
+                <a th:if="${book.availableQuantity > 0}"
+                   th:href="@{/loans/borrow/{id}(id=${book.id})}"
+                   class="btn btn-success btn-sm">
+                   Borrow
+                </a>
+
+                <span th:if="${book.availableQuantity <= 0}" class="text-danger ms-2">
+                    Not Available
+                </span>
+            </span>
+
+        </div>
+
+    </div>
+
 </div>
 
 </body>
