@@ -13,6 +13,7 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
+    // Register user if email is not already taken
     public LibraryUser registerUser(LibraryUser user) {
         if (userRepository.existsByEmail(user.getEmail())) {
             return null;
@@ -20,6 +21,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    // Validate user credentials
     public LibraryUser login(String email, String password) {
         LibraryUser user = userRepository.findByEmail(email);
 

@@ -16,16 +16,19 @@ public class AuthController {
         this.userService = userService;
     }
 
+    // Redirect to login page
     @GetMapping("/")
     public String home() {
         return "redirect:/login";
     }
 
+    // Show login page
     @GetMapping("/login")
     public String showLoginPage() {
         return "auth/login";
     }
 
+    // Process login
     @PostMapping("/login")
     public String login(@RequestParam String email,
                         @RequestParam String password,
@@ -43,16 +46,18 @@ public class AuthController {
         return "redirect:/books";
     }
 
+    // Show register page
     @GetMapping("/register")
     public String showRegisterPage(Model model) {
         model.addAttribute("user", new LibraryUser());
         return "auth/register";
     }
 
+    // Process registration
     @PostMapping("/register")
     public String register(@ModelAttribute("user") LibraryUser user, Model model) {
-        user.setRole("USER");
 
+        user.setRole("USER");
         LibraryUser savedUser = userService.registerUser(user);
 
         if (savedUser == null) {
@@ -63,6 +68,7 @@ public class AuthController {
         return "redirect:/login";
     }
 
+    // Logout user
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate();

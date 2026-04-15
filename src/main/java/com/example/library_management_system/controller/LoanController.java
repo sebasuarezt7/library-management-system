@@ -17,6 +17,7 @@ public class LoanController {
         this.loanService = loanService;
     }
 
+    // Show active borrowed books
     @GetMapping
     public String showBorrowedBooks(HttpSession session, Model model) {
         LibraryUser user = (LibraryUser) session.getAttribute("loggedUser");
@@ -30,6 +31,7 @@ public class LoanController {
         return "main/loans";
     }
 
+    // Show loan history
     @GetMapping("/history")
     public String showLoanHistory(HttpSession session, Model model) {
         LibraryUser user = (LibraryUser) session.getAttribute("loggedUser");
@@ -43,6 +45,7 @@ public class LoanController {
         return "main/loan-history";
     }
 
+    // Borrow a book
     @GetMapping("/borrow/{bookId}")
     public String borrowBook(@PathVariable Long bookId, HttpSession session) {
         LibraryUser user = (LibraryUser) session.getAttribute("loggedUser");
@@ -55,6 +58,7 @@ public class LoanController {
         return "redirect:/loans";
     }
 
+    // Return a borrowed book
     @GetMapping("/return/{loanId}")
     public String returnBook(@PathVariable Long loanId, HttpSession session) {
         LibraryUser user = (LibraryUser) session.getAttribute("loggedUser");

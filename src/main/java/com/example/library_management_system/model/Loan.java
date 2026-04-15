@@ -11,6 +11,7 @@ public class Loan {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // Loan dates
     @Column(name = "borrow_date", nullable = false)
     private LocalDate borrowDate;
 
@@ -23,6 +24,7 @@ public class Loan {
     @Column(nullable = false, length = 20)
     private String status;
 
+    // Relationships
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private LibraryUser user;
@@ -45,59 +47,21 @@ public class Loan {
         this.book = book;
     }
 
-    public Long getId() {
-        return id;
-    }
+    // Getters
+    public Long getId() { return id; }
+    public LocalDate getBorrowDate() { return borrowDate; }
+    public LocalDate getDueDate() { return dueDate; }
+    public LocalDate getReturnDate() { return returnDate; }
+    public String getStatus() { return status; }
+    public LibraryUser getUser() { return user; }
+    public Book getBook() { return book; }
 
-    public LocalDate getBorrowDate() {
-        return borrowDate;
-    }
-
-    public LocalDate getDueDate() {
-        return dueDate;
-    }
-
-    public LocalDate getReturnDate() {
-        return returnDate;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public LibraryUser getUser() {
-        return user;
-    }
-
-    public Book getBook() {
-        return book;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setBorrowDate(LocalDate borrowDate) {
-        this.borrowDate = borrowDate;
-    }
-
-    public void setDueDate(LocalDate dueDate) {
-        this.dueDate = dueDate;
-    }
-
-    public void setReturnDate(LocalDate returnDate) {
-        this.returnDate = returnDate;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public void setUser(LibraryUser user) {
-        this.user = user;
-    }
-
-    public void setBook(Book book) {
-        this.book = book;
-    }
+    // Setters
+    public void setId(Long id) { this.id = id; }
+    public void setBorrowDate(LocalDate borrowDate) { this.borrowDate = borrowDate; }
+    public void setDueDate(LocalDate dueDate) { this.dueDate = dueDate; }
+    public void setReturnDate(LocalDate returnDate) { this.returnDate = returnDate; }
+    public void setStatus(String status) { this.status = status; }
+    public void setUser(LibraryUser user) { this.user = user; }
+    public void setBook(Book book) { this.book = book; }
 }

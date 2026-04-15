@@ -26,6 +26,7 @@ public class LoanService {
         this.userRepository = userRepository;
     }
 
+    // Get active loans (borrowed books)
     public List<Loan> getActiveLoansByUser(Long userId) {
         return loanRepository.findByUserIdAndStatus(userId, "BORROWED");
     }
@@ -34,15 +35,12 @@ public class LoanService {
         return loanRepository.findByUserId(userId);
     }
 
+    // Borrow a book if available
     public void borrowBook(Long userId, Long bookId) {
         LibraryUser user = userRepository.findById(userId).orElse(null);
         Book book = bookRepository.findById(bookId).orElse(null);
 
-        if (user == null || book == null) {
-            return;
-        }
-
-        if (book.getAvailableQuantity() <= 0) {
+        if (user == null || book == null || book.getAvailableQuantity() <= 0) {
             return;
         }
 
@@ -59,14 +57,11 @@ public class LoanService {
         loanRepository.save(loan);
     }
 
+    // Return a book
     public void returnBook(Long loanId) {
         Loan loan = loanRepository.findById(loanId).orElse(null);
 
-        if (loan == null) {
-            return;
-        }
-
-        if ("RETURNED".equalsIgnoreCase(loan.getStatus())) {
+        if (loan == null || "RETURNED".equalsIgnoreCase(loan.getStatus())) {
             return;
         }
 

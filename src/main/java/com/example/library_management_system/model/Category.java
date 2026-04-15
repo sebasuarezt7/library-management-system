@@ -1,6 +1,5 @@
 package com.example.library_management_system.model;
 
-
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,9 +12,11 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // Category name (unique)
     @Column(nullable = false, unique = true, length = 100)
     private String name;
 
+    // Relationship with books
     @OneToMany(mappedBy = "category")
     private List<Book> books = new ArrayList<>();
 
@@ -28,27 +29,13 @@ public class Category {
         this.books = books;
     }
 
-    public Long getId() {
-        return id;
-    }
+    // Getters
+    public Long getId() { return id; }
+    public String getName() { return name; }
+    public List<Book> getBooks() { return books; }
 
-    public String getName() {
-        return name;
-    }
-
-    public List<Book> getBooks() {
-        return books;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setBooks(List<Book> books) {
-        this.books = books;
-    }
+    // Setters
+    public void setId(Long id) { this.id = id; }
+    public void setName(String name) { this.name = name; }
+    public void setBooks(List<Book> books) { this.books = books; }
 }

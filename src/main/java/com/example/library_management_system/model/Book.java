@@ -12,6 +12,7 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // Basic book info
     @Column(nullable = false, length = 200)
     private String title;
 
@@ -24,16 +25,19 @@ public class Book {
     @Column(name = "published_year", nullable = false)
     private Integer publishedYear;
 
+    // Inventory fields
     @Column(nullable = false)
     private Integer quantity;
 
     @Column(name = "available_quantity", nullable = false)
     private Integer availableQuantity;
 
+    // Relationship with category
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
+    // Relationship with loans
     @OneToMany(mappedBy = "book")
     private List<Loan> loans = new ArrayList<>();
 
@@ -53,75 +57,25 @@ public class Book {
         this.loans = loans;
     }
 
-    public Long getId() {
-        return id;
-    }
+    // Getters
+    public Long getId() { return id; }
+    public String getTitle() { return title; }
+    public String getAuthor() { return author; }
+    public String getIsbn() { return isbn; }
+    public Integer getPublishedYear() { return publishedYear; }
+    public Integer getQuantity() { return quantity; }
+    public Integer getAvailableQuantity() { return availableQuantity; }
+    public Category getCategory() { return category; }
+    public List<Loan> getLoans() { return loans; }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public String getAuthor() {
-        return author;
-    }
-
-    public String getIsbn() {
-        return isbn;
-    }
-
-    public Integer getPublishedYear() {
-        return publishedYear;
-    }
-
-    public Integer getQuantity() {
-        return quantity;
-    }
-
-    public Integer getAvailableQuantity() {
-        return availableQuantity;
-    }
-
-    public Category getCategory() {
-        return category;
-    }
-
-    public List<Loan> getLoans() {
-        return loans;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public void setAuthor(String author) {
-        this.author = author;
-    }
-
-    public void setIsbn(String isbn) {
-        this.isbn = isbn;
-    }
-
-    public void setPublishedYear(Integer publishedYear) {
-        this.publishedYear = publishedYear;
-    }
-
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
-    }
-
-    public void setAvailableQuantity(Integer availableQuantity) {
-        this.availableQuantity = availableQuantity;
-    }
-
-    public void setCategory(Category category) {
-        this.category = category;
-    }
-
-    public void setLoans(List<Loan> loans) {
-        this.loans = loans;
-    }
+    // Setters
+    public void setId(Long id) { this.id = id; }
+    public void setTitle(String title) { this.title = title; }
+    public void setAuthor(String author) { this.author = author; }
+    public void setIsbn(String isbn) { this.isbn = isbn; }
+    public void setPublishedYear(Integer publishedYear) { this.publishedYear = publishedYear; }
+    public void setQuantity(Integer quantity) { this.quantity = quantity; }
+    public void setAvailableQuantity(Integer availableQuantity) { this.availableQuantity = availableQuantity; }
+    public void setCategory(Category category) { this.category = category; }
+    public void setLoans(List<Loan> loans) { this.loans = loans; }
 }

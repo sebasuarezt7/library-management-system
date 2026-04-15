@@ -13,6 +13,7 @@ public class LibraryUser {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // Basic user info
     @Column(name = "first_name", nullable = false, length = 50)
     private String firstName;
 
@@ -31,6 +32,7 @@ public class LibraryUser {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
+    // Relationship with loans
     @OneToMany(mappedBy = "user")
     private List<Loan> loans = new ArrayList<>();
 
@@ -50,71 +52,23 @@ public class LibraryUser {
         this.loans = loans;
     }
 
-    // GETTERS
+    // Getters
+    public Long getId() { return id; }
+    public String getFirstName() { return firstName; }
+    public String getLastName() { return lastName; }
+    public String getEmail() { return email; }
+    public String getPassword() { return password; }
+    public String getRole() { return role; }
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public List<Loan> getLoans() { return loans; }
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public List<Loan> getLoans() {
-        return loans;
-    }
-
-    // SETTERS
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public void setLoans(List<Loan> loans) {
-        this.loans = loans;
-    }
+    // Setters
+    public void setId(Long id) { this.id = id; }
+    public void setFirstName(String firstName) { this.firstName = firstName; }
+    public void setLastName(String lastName) { this.lastName = lastName; }
+    public void setEmail(String email) { this.email = email; }
+    public void setPassword(String password) { this.password = password; }
+    public void setRole(String role) { this.role = role; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+    public void setLoans(List<Loan> loans) { this.loans = loans; }
 }

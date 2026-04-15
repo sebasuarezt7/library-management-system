@@ -1,0 +1,5 @@
+/* Background styling */
+body {
+    background: linear-gradient(135deg, #4e73df, #1cc88a);
+    height: 100vh;
+}

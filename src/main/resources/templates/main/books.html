@@ -4,7 +4,11 @@
     <meta charset="UTF-8">
     <title>Books</title>
 
+    <!-- Bootstrap -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" th:href="@{/main.css}">
 </head>
 <body>
 
@@ -18,43 +22,51 @@
         (<span th:text="${loggedUser.role}"></span>)
     </p>
 
-    <!-- NAV -->
+    <!-- Navigation -->
     <div class="mb-3 text-center">
         <a th:href="@{/books}" class="btn btn-primary btn-sm">Books</a>
+
+        <span th:if="${loggedUser.role == 'USER'}">
         <a th:href="@{/loans}" class="btn btn-secondary btn-sm">Borrowed</a>
         <a th:href="@{/loans/history}" class="btn btn-dark btn-sm">History</a>
+    </span>
+
         <a th:href="@{/logout}" class="btn btn-danger btn-sm">Logout</a>
     </div>
 
-    <!-- ALERTS -->
+    <!-- Success message -->
     <div th:if="${success}" class="alert alert-success text-center">
         <span th:text="${success}"></span>
     </div>
 
+    <!-- Error message -->
     <div th:if="${error}" class="alert alert-danger text-center">
         <span th:text="${error}"></span>
     </div>
 
-    <!-- ADMIN ACTION -->
+    <!-- Admin action -->
     <div class="mb-3" th:if="${loggedUser.role == 'ADMIN'}">
         <a th:href="@{/books/add}" class="btn btn-success">Add New Book</a>
     </div>
 
-    <!-- SEARCH -->
+    <!-- Search form -->
     <form th:action="@{/books/search}" method="get" class="mb-4">
         <div class="input-group">
-            <input type="text" name="title" class="form-control"
-                   placeholder="Search by title" th:value="${searchValue}">
+            <input type="text"
+                   name="title"
+                   class="form-control"
+                   placeholder="Search by title"
+                   th:value="${searchValue}">
             <button type="submit" class="btn btn-outline-primary">Search</button>
         </div>
     </form>
 
-    <!-- EMPTY -->
+    <!-- Empty state -->
     <div th:if="${#lists.isEmpty(books)}" class="alert alert-info text-center">
         No books found.
     </div>
 
-    <!-- BOOK LIST -->
+    <!-- Book list -->
     <div th:each="book : ${books}" class="card mb-3 shadow-sm p-3">
 
         <h5 th:text="${book.title}"></h5>
@@ -63,31 +75,57 @@
         <p><strong>Available:</strong> <span th:text="${book.availableQuantity}"></span></p>
         <p><strong>Category:</strong> <span th:text="${book.category.name}"></span></p>
 
-        <!-- ACTIONS -->
+        <!-- Actions -->
         <div class="mt-2">
-
             <a th:href="@{/books/{id}(id=${book.id})}" class="btn btn-primary btn-sm">Details</a>
 
-            <!-- ADMIN -->
+            <!-- Admin actions -->
             <span th:if="${loggedUser.role == 'ADMIN'}">
                 <a th:href="@{/books/edit/{id}(id=${book.id})}" class="btn btn-warning btn-sm">Edit</a>
                 <a th:href="@{/books/delete/{id}(id=${book.id})}" class="btn btn-danger btn-sm">Delete</a>
             </span>
 
-            <!-- USER -->
+            <!-- User actions -->
             <span th:if="${loggedUser.role == 'USER'}">
                 <a th:if="${book.availableQuantity > 0}"
                    th:href="@{/loans/borrow/{id}(id=${book.id})}"
                    class="btn btn-success btn-sm">
-                   Borrow
+                    Borrow
                 </a>
 
                 <span th:if="${book.availableQuantity <= 0}" class="text-danger ms-2">
                     Not Available
                 </span>
             </span>
-
         </div>
+
+    </div>
+
+    <!-- Pagination -->
+    <div class="text-center mt-4" th:if="${totalPages > 1}">
+
+        <!-- Previous page -->
+        <a th:if="${currentPage > 0}"
+           th:href="@{/books(page=${currentPage - 1})}"
+           class="btn btn-outline-secondary btn-sm">
+            Previous
+        </a>
+
+        <!-- Page numbers -->
+        <span th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+            <a th:href="@{/books(page=${i})}"
+               th:text="${i + 1}"
+               th:classappend="${i == currentPage} ? ' btn-primary text-white' : ' btn-outline-primary'"
+               class="btn btn-sm">
+            </a>
+        </span>
+
+        <!-- Next page -->
+        <a th:if="${currentPage < totalPages - 1}"
+           th:href="@{/books(page=${currentPage + 1})}"
+           class="btn btn-outline-secondary btn-sm">
+            Next
+        </a>
 
     </div>
 

@@ -3,8 +3,10 @@ package com.example.library_management_system.service;
 import com.example.library_management_system.model.Book;
 import com.example.library_management_system.repository.BookRepository;
 import com.example.library_management_system.repository.LoanRepository;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -17,6 +19,11 @@ public class BookService {
     public BookService(BookRepository bookRepository, LoanRepository loanRepository) {
         this.bookRepository = bookRepository;
         this.loanRepository = loanRepository;
+    }
+
+    // Get books with pagination
+    public Page<Book> getBooksPaginated(int page, int size) {
+        return bookRepository.findAll(PageRequest.of(page, size));
     }
 
     public List<Book> getAllBooks() {
@@ -35,6 +42,7 @@ public class BookService {
         return bookRepository.save(book);
     }
 
+    // Update existing book data
     public Book updateBook(Long id, Book updatedBook) {
         Book existingBook = bookRepository.findById(id).orElse(null);
 
@@ -52,6 +60,8 @@ public class BookService {
 
         return null;
     }
+
+    // Delete book only if it is not currently borrowed
     @Transactional
     public boolean deleteBook(Long id) {
         if (loanRepository.existsByBookIdAndStatus(id, "BORROWED")) {

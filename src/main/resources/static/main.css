@@ -1,0 +1,28 @@
+/* General app background */
+body {
+    background-color: #f8f9fa;
+}
+
+/* Card styling */
+.card {
+    border-radius: 10px;
+    border: none;
+}
+
+/* Text spacing */
+.card p {
+    margin-bottom: 8px;
+}
+
+/* Button spacing */
+.card .btn {
+    margin-right: 5px;
+    margin-bottom: 5px;
+}
+
+/* Table styling */
+.table {
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+}
